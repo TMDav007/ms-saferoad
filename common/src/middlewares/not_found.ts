@@ -1,4 +1,4 @@
-import Logging from "../../../common/src/library/Logging";
+import { Logging } from "./../library/Logging";
 import { Response, Request, NextFunction } from "express";
 
 const not_found = (_req: Request, res: Response, _next: NextFunction) => {
@@ -7,4 +7,4 @@ const not_found = (_req: Request, res: Response, _next: NextFunction) => {
   return res.status(404).json({ message: error.message });
 };
 
-export default not_found;
+export { not_found };

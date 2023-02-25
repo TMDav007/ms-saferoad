@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-export default class Logging {
+export class Logging {
   public static log = (args: any) => this.info;
   public static info = (args: any) =>
     console.log(

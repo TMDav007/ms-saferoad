@@ -14,5 +14,4 @@ const CheckRequestType = (req: Request, res: Response, next: NextFunction) => {
 
 	next();
 };
-
-export default CheckRequestType;
+export {CheckRequestType};
