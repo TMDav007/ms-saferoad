@@ -3,7 +3,6 @@ export * from "./library/decryptPassword";
 export * from "./library/encryptPassword";
 export * from "./library/generateOTP";
 export * from "./library/mailTransporter";
-// export * from "./library/verificationEmail";
 
 export * from "./middlewares/current_user";
 export * from "./middlewares/error-middleware";
