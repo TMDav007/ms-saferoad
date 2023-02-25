@@ -4,4 +4,4 @@ declare const mailTransporter: ({ to, subject, text, html, }: {
     text?: string | undefined;
     html?: any;
 }) => Promise<void>;
-export default mailTransporter;
+export { mailTransporter };

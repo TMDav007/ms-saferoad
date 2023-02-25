@@ -11,6 +11,7 @@ export interface JwtPayload {
   currentUser: string;
   email: string;
   verified: boolean;
+  jwt?: string;
   sub?: string | undefined;
   exp?: number | undefined;
   nbf?: number | undefined;

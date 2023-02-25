@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.mailTransporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const Logging_1 = require("./Logging");
 const mailTransporter = ({ to, subject, text, html, }) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,4 +41,4 @@ const mailTransporter = ({ to, subject, text, html, }) => __awaiter(void 0, void
         Logging_1.Logging.error(`an error occoured while sending email ${(error === null || error === void 0 ? void 0 : error.message) || error}`);
     }
 });
-exports.default = mailTransporter;
+exports.mailTransporter = mailTransporter;
