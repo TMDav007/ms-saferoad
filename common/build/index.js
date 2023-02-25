@@ -19,7 +19,6 @@ __exportStar(require("./library/decryptPassword"), exports);
 __exportStar(require("./library/encryptPassword"), exports);
 __exportStar(require("./library/generateOTP"), exports);
 __exportStar(require("./library/mailTransporter"), exports);
-// export * from "./library/verificationEmail";
 __exportStar(require("./middlewares/current_user"), exports);
 __exportStar(require("./middlewares/error-middleware"), exports);
 __exportStar(require("./middlewares/not_found"), exports);
