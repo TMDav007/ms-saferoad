@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { Logging } from "./Logging";
+// import { Logging } from "./Logging";
 
 const mailTransporter = async ({
   to,
@@ -33,9 +33,9 @@ const mailTransporter = async ({
     };
 
     const sending = await transporter.sendMail(mailOptions);
-    Logging.info(`email send to user ${sending}`);
+    console.log(`email send to user ${sending}`);
   } catch (error: any) {
-    Logging.error(
+    console.error(
       `an error occoured while sending email ${error?.message || error}`
     );
   }
