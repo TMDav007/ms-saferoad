@@ -1,6 +1,6 @@
 {
   "name": "@sfroads/common",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -23,7 +23,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "typescript": "^4.9.5"
   },
-  "type" : "module",
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "chalk": "^5.2.0",

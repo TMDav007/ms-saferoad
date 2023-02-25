@@ -1,4 +1,4 @@
-import chalk from "chalk";
+const { chalk } = require("chalk");
 
 class Logging {
   public static log = (args: any) => this.info;
