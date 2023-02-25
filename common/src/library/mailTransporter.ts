@@ -41,4 +41,4 @@ const mailTransporter = async ({
   }
 };
 
-export default mailTransporter;
+export { mailTransporter };

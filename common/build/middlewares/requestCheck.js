@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CheckRequestType = void 0;
 const CheckRequestType = (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -9,4 +10,4 @@ const CheckRequestType = (req, res, next) => {
     }
     next();
 };
-exports.default = CheckRequestType;
+exports.CheckRequestType = CheckRequestType;
