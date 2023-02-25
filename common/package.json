@@ -3,7 +3,6 @@
   "version": "1.0.14",
   "description": "",
   "main": "./build/index.js",
-  "type": "module",
   "types": "./build/index.d.ts",
   "files": [
     "build/**/*"
