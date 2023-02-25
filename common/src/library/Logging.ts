@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-export class Logging {
+class Logging {
   public static log = (args: any) => this.info;
   public static info = (args: any) =>
     console.log(
@@ -20,3 +20,5 @@ export class Logging {
       typeof args === "string" ? chalk.redBright(args) : args
     );
 }
+
+export {Logging}
