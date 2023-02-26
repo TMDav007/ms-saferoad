@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mailTransporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-// import { Logging } from "./Logging";
+const Logging_1 = require("./Logging");
 const mailTransporter = ({ to, subject, text, html, }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const transporter = nodemailer_1.default.createTransport({
@@ -35,10 +35,10 @@ const mailTransporter = ({ to, subject, text, html, }) => __awaiter(void 0, void
             html: html,
         };
         const sending = yield transporter.sendMail(mailOptions);
-        console.log(`email send to user ${sending}`);
+        Logging_1.Logging.info(`email send to user ${sending}`);
     }
     catch (error) {
-        console.error(`an error occoured while sending email ${(error === null || error === void 0 ? void 0 : error.message) || error}`);
+        Logging_1.Logging.error(`an error occoured while sending email ${(error === null || error === void 0 ? void 0 : error.message) || error}`);
     }
 });
 exports.mailTransporter = mailTransporter;
