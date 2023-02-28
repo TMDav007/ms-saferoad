@@ -11,3 +11,14 @@ export const requireAuth = (
   }
   next();
 };
+
+export const requireOfficerAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req?.currentUser?.userType !== "Officer") {
+    throw new AppError(403, "Not authorized!!!");
+  }
+  next();
+};

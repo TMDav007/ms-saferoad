@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = exports.AppError = void 0;
 const http_status_codes_1 = require("http-status-codes");
+const Logging_1 = require("../library/Logging");
 class AppError extends Error {
     constructor(code, message) {
         super();
@@ -15,6 +16,7 @@ exports.AppError = AppError;
 const errorHandler = (error, req, res, next) => {
     const code = error.code || http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
     let message = error.message;
+    Logging_1.Logging.error(`Server error ${message}`);
     if (!(error instanceof AppError)) {
         message = "This problem is from our end, please try again";
     }
