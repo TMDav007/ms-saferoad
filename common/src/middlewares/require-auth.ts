@@ -7,7 +7,7 @@ export const requireAuth = (
   next: NextFunction
 ) => {
   if (!req.currentUser) {
-    throw new AppError(401, "User not authorized");
+    throw new AppError(401, "User not authenticated");
   }
   next();
 };

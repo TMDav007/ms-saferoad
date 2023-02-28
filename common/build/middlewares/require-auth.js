@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requireAuth = void 0;
+exports.requireOfficerAuth = exports.requireAuth = void 0;
 const error_middleware_1 = require("./error-middleware");
 const requireAuth = (req, res, next) => {
     if (!req.currentUser) {
@@ -9,3 +9,11 @@ const requireAuth = (req, res, next) => {
     next();
 };
 exports.requireAuth = requireAuth;
+const requireOfficerAuth = (req, res, next) => {
+    var _a;
+    if (((_a = req === null || req === void 0 ? void 0 : req.currentUser) === null || _a === void 0 ? void 0 : _a.userType) !== "Officer") {
+        throw new error_middleware_1.AppError(403, "Not authorized!!!");
+    }
+    next();
+};
+exports.requireOfficerAuth = requireOfficerAuth;
