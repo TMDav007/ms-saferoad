@@ -9,3 +9,9 @@ export * from "./middlewares/error-middleware";
 export * from "./middlewares/not_found";
 export * from "./middlewares/requestCheck";
 export * from "./middlewares/require-auth";
+
+export * from "./events/base-publisher";
+export * from "./events/base-listener";
+export * from "./events/subjects";
+export * from "./events/ticket-created-event";
+export * from "./events/ticket-updated-event";

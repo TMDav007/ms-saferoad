@@ -16,8 +16,8 @@ exports.AppError = AppError;
 const errorHandler = (error, req, res, next) => {
     const code = error.code || http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
     let message = error.message;
-    Logging_1.Logging.error(`Server error ${message}`);
     if (!(error instanceof AppError)) {
+        Logging_1.Logging.error(`Server error ${message}`);
         message = "This problem is from our end, please try again";
     }
     return res.status(code).send({
