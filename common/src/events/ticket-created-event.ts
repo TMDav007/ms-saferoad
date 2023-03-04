@@ -7,6 +7,8 @@ export interface TicketCreatedEvent {
     offenderIDNumber: string;
     offenderName: string;
     createdBy: string;
+    offense: string;
+    price: string;
     plateNumber: string;
     carType: string;
     carModel: string;

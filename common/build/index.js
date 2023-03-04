@@ -24,3 +24,8 @@ __exportStar(require("./middlewares/error-middleware"), exports);
 __exportStar(require("./middlewares/not_found"), exports);
 __exportStar(require("./middlewares/requestCheck"), exports);
 __exportStar(require("./middlewares/require-auth"), exports);
+__exportStar(require("./events/base-publisher"), exports);
+__exportStar(require("./events/base-listener"), exports);
+__exportStar(require("./events/subjects"), exports);
+__exportStar(require("./events/ticket-created-event"), exports);
+__exportStar(require("./events/ticket-updated-event"), exports);
