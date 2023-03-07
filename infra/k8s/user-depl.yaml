@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: gcr.io/saferoad-dev/users
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: MONGO_URI
+              value: 'mongodb://user-mongo-srv:27017/user' 
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-auth-secret
+                  key: JWT_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-srv
+spec:
+  selector:
+    app: users
+  ports:
+    - name: users
+      protocol: TCP
+      port: 1337
+      targetPort: 1337

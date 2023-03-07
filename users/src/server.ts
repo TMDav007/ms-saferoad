@@ -1,0 +1,52 @@
+import http from "http";
+import { Logging } from "@sfroads/common";
+import connectDB, { SERVER_PORT } from "./DB/connectDB";
+import createServer from "./app";
+import dotenv from "dotenv";
+import { natsWrapper } from "./nats-wrapper";
+import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
+import createMQProducer from "./producer";
+import createMQConsumer, { CreateChannel } from "./consumer";
+dotenv.config();
+
+// natsWrapper.connect(
+//   process.env.NATS_CLUSTER_ID!,
+//   process.env.NATS_CLIENT_ID!,
+//   process.env.NATS_URL!
+// );
+// natsWrapper.client.on("close", () => {
+//   console.log("NATS connection closed!");
+//   process.exit();
+// });
+
+// new TicketCreatedListener(natsWrapper.client ).listen();
+
+// process.on("SIGINT", () => {
+//   natsWrapper.client.close();
+// });
+// process.on("SIGTERM", () => {
+//   natsWrapper.client.close();
+// });
+// export const producer = createMQProducer(AMQP_URL, QUEUE_NAME);
+const AMQP_URL = process.env.AMQP_URL!;
+const QUEUE_NAME = "saferoad";
+
+// export const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME);
+const start = async () => {
+  const channel = await CreateChannel();
+  connectDB();
+
+  // mqWrapper.connect(AMQP_URL, QUEUE_NAME);
+  // consumer()
+  // const consume = "Ticket:Created"
+  //consumer(consume, consumer)
+  const app = createServer();
+
+  http
+    .createServer(app)
+    .listen(SERVER_PORT, () =>
+      Logging.info(`Auth Server is running on port ${SERVER_PORT}!!`)
+    );
+};
+
+start();
