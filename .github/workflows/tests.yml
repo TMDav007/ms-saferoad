@@ -25,5 +25,5 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run test for user service
-        run: cd user && npm install && npm run test:ci
+        run: cd users && npm install && npm run test:ci
 
