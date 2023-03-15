@@ -2,17 +2,23 @@ import { SubscribeMessage } from "../consumer";
 //import { consumer } from "../server";
 import { handleTicketCreated } from "./event-subscribed";
 
+export const SubscribeEvents = (payload: any) => {
+  console.log("Triggering.... Customer Events");
 
-const SubscribeEvents = (payload: any) => {
-  const { event, data } = payload;
-  switch (event) {
+  payload = JSON.parse(payload);
+  const { action, data } = payload;
+  console.log(payload, data, action, "payLoad");
+
+  switch (action) {
     case "Ticket:Created":
       handleTicketCreated(data);
+      break;
     case "Test":
       console.log("Working ....SUbscrber");
-    default: break;
+      break;
+    default:
+      break;
   }
 };
 
 //console.log(consumer)
-

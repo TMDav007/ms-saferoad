@@ -72,7 +72,7 @@ export default () => {
         data: eventData,
       };
       PublishMessage(
-        channel,
+        "ch",
         process.env.TICKET_BINDING_KEY,
         JSON.stringify(msg)
       );

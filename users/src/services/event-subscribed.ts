@@ -1,10 +1,12 @@
 import User from "../models/User";
 import { StatusCodes } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
+import { IUser } from "../utils/types";
+import { AppError } from "@sfroads/common";
 
 export const handleTicketCreated = async (data: any) => {
   const {
-    id,
+    _id,
     offenderIDNumber,
     offenderName,
     createdBy,
@@ -21,8 +23,9 @@ export const handleTicketCreated = async (data: any) => {
     updatedAt,
   } = data;
 
+  console.log("Im here");
   const newTicket = {
-    id,
+    _id,
     offenderIDNumber,
     offenderName,
     createdBy,
@@ -39,7 +42,13 @@ export const handleTicketCreated = async (data: any) => {
     updatedAt,
   };
 
-  await User.findOneAndUpdate(
+  console.log("Im here");
+  const userExist = await User.findOne({ NIN: offenderIDNumber });
+  console.log(userExist);
+  if (!userExist) {
+    throw new AppError(404, "user record does not exist in the database");
+  }
+  return await User.findOneAndUpdate(
     {
       NIN: offenderIDNumber,
     },

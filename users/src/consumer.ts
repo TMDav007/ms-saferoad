@@ -36,7 +36,7 @@ const createMQConsumer = (amqpURI: string, queueName: string) => {
     });
   });
   return (action: any, ch: any) => {
-    console.log(ch)
+    console.log(ch);
     ch?.assertQueue(queueName, { durable: true });
     ch?.consume(
       queueName,
@@ -62,38 +62,56 @@ export default createMQConsumer;
 
 // Message Broker
 export const CreateChannel = async () => {
-    try {
-      const connection = await amqplib.connect(process.env.MESSAGE_BROKER_URL!);
-      const channel = await connection.createChannel();
-      await channel.assertExchange(process.env.EXCHANGE_NAME!, "direct", {durable:false});
-      return channel;
-    } catch (err: any) {
-      throw new AppError(500, err?.message);
-    }
-  };
-  
-  export const PublishMessage = async (channel: any, binding_key: any, message: any) => {
-    try {
-      await channel.publish(
-        process.env.EXCHANGE_NAME,
-        message,
-        binding_key,
-        Buffer.from(message)
-      );
-    } catch (err: any) {
-      throw new AppError(500, err?.message);
-    }
-  };
-  
-  export const SubscribeMessage = async (channel: any, service: any, binding_key: any) => {
-    const appQueue = new channel.assertQueue('QUEUE_NAME');
-  
-    channel.bindQueue(appQueue.queue, process.env.EXCHANGE_NAME, binding_key);
-  
-    channel.consume(appQueue.queue, (data: any) => {
-      console.log("recieved data");
-      console.log(data.content.toString());
-      channel.ack(data);
+  try {
+    const connection = await amqplib.connect(process.env.AMQP_URL!);
+    const channel = await connection.createChannel();
+    await channel.assertExchange(process.env.EXCHANGE_NAME!, "direct", {
+      durable: true,
     });
-  };
-  
+    return channel;
+  } catch (err: any) {
+    throw new AppError(500, err?.message);
+  }
+};
+
+export const PublishMessage = async (
+  channel: any,
+  binding_key: any,
+  message: any
+) => {
+  try {
+    await channel.publish(
+      process.env.EXCHANGE_NAME,
+      message,
+      binding_key,
+      Buffer.from(message)
+    );
+  } catch (err: any) {
+    throw new AppError(500, err?.message);
+  }
+};
+
+export const SubscribeMessage = async (channel: any, service: any) => {
+  await channel.assertExchange(process.env.EXCHANGE_NAME, "direct", {
+    durable: true,
+  });
+  const q = await channel.assertQueue("", { exclusive: true });
+  channel.bindQueue(
+    q.queue,
+    process.env.EXCHANGE_NAME,
+    process.env.USER_BINDING_KEY
+  );
+
+  channel.consume(
+    q.queue,
+    (msg: Message | null) => {
+      if (msg) {
+        console.log("recieved data");
+        console.log(msg?.content.toString());
+        service(msg.content.toString());
+        channel.ack(msg);
+      }
+    },
+    { noAck: false }
+  );
+};

@@ -1,19 +1,19 @@
 export interface ITicket {
-	id: string
+	id?: string
 	offenderIDNumber: string;
 	offenderName:string;
-	createdBy: string;
+	createdBy?: string;
 	plateNumber: string;
-	offense: string;
+	offense?: string;
 	price: string;
 	carType: string;
 	carModel: string;
 	offenderPhoneNumber: string;
 	evidenceUrl?: string;
 	evidenceCloudinaryId?: string;
-	status: string;
-	createdAt: Date;
-	updatedAt: Date;
+	status?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 export interface NINDummyData {

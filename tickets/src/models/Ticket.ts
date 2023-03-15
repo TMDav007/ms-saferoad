@@ -54,8 +54,8 @@ const TicketSchema = new Schema<ITicket>({
     enum: ["Unpaid", "Paid"],
     default: "Unpaid",
   },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
+  createdAt:  Date ,
+  updatedAt: Date ,
 });
 
 export default model("Ticket", TicketSchema);

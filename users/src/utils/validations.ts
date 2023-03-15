@@ -3,7 +3,7 @@ import { IAccountVerify, ISignup } from "./types";
 
 const validateSignupData = (signup: ISignup) => {
 	const signupSchema = Joi.object({
-		fullName: Joi.string().min(5).max(30).required(),
+		fullName: Joi.string().min(5).max(30),
 		phoneNumber: Joi.string(),
 		email: Joi.string().email(),
 		NIN: Joi.string().alphanum(),
@@ -11,8 +11,8 @@ const validateSignupData = (signup: ISignup) => {
 		password: Joi.string().min(6).max(36),
 		confirmPassword: Joi.string().min(6).max(36).valid(Joi.ref("password")),
 	})
-		.xor("WIP", "NIN", "email", "phoneNumber")
-		.and("email", "fullName");
+		.xor("WIP", "NIN", "email", "phoneNumber");
+		//.and("email", "fullName");
 
 	return signupSchema.validate(signup);
 };

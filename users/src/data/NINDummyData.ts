@@ -4,7 +4,7 @@ export const offenderData: Array<NINDummyData> = [
   {
     fullName: "Romoke Peter",
     NIN: "12383AB93",
-    email: "romokepeter@yahoo.com",
+    email: "afolabitoluwalase16@gmail.com",
     phoneNumber: "080132348932",
     plateNumber: "AS234BSJ",
   },

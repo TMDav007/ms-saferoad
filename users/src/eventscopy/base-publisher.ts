@@ -8,15 +8,15 @@ interface Event {
 
 export abstract class Publisher<T extends Event> {
   abstract subject: T["subject"];
-  private clientsdsdsd: Stan;
+  private client: Stan;
 
-  constructor(clientsdsdsd: Stan) {
-    this.clientsdsdsd = clientsdsdsd;
+  constructor(client: Stan) {
+    this.client = client;
   }
 
   publish(subject: T["subject"], data: T["data"]): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.clientsdsdsd.publish(subject, JSON.stringify(data), (err) => {
+      this.client.publish(subject, JSON.stringify(data), (err) => {
         if (err) {
           return reject(err);
         }

@@ -2,7 +2,7 @@ import { Schema, model, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { generateOTP } from "@sfroads/common";
-import {IUser } from "../utils/types";
+import { IUser } from "../utils/types";
 
 const UserSchema = new Schema<IUser>({
   fullName: {
@@ -68,11 +68,19 @@ const UserSchema = new Schema<IUser>({
         type: String,
         required: true,
       },
-      officerID: {
+      createdBy: {
         type: String,
         required: true,
       },
       plateNumber: {
+        type: String,
+        required: true,
+      },
+      offense: {
+        type: String,
+        required: true,
+      },
+      price: {
         type: String,
         required: true,
       },
@@ -84,16 +92,28 @@ const UserSchema = new Schema<IUser>({
         type: String,
         required: true,
       },
-      phoneNumber: {
+      offenderPhoneNumber: {
         type: String,
+      },
+      evidenceUrl: {
+        type: String,
+        required: false,
+        maxlength: 255,
+        default: null,
+      },
+      evidenceCloudinaryId: {
+        type: String,
+        required: false,
+        maxlength: 255,
+        default: null,
       },
       status: {
         type: String,
         enum: ["Unpaid", "Paid"],
         default: "Unpaid",
       },
-      createdAt: { type: Date },
-      updatedAt: { type: Date },
+      createdAt: Date,
+      updatedAt: Date,
     },
   ],
   confirmationCode: {

@@ -30,35 +30,46 @@ const createMQProducer = (amqUrl: string, queueName: string) => {
 
 export default createMQProducer;
 
-
 // Message Broker
 
 export const CreateChannel = async () => {
   try {
-    const connection = await amqplib.connect(process.env.MESSAGE_BROKER_URL!);
+    console.log(process.env.AMQP_URL!, process.env.EXCHANGE_NAME);
+    const connection = await amqplib.connect(process.env.AMQP_URL!);
+
     const channel = await connection.createChannel();
-    await channel.assertExchange(process.env.EXCHANGE_NAME!, "direct", {durable:false});
+    await channel.assertExchange(process.env.EXCHANGE_NAME!, "direct", {
+      durable: true,
+    });
     return channel;
   } catch (err: any) {
     throw new AppError(500, err?.message);
   }
 };
 
-export const PublishMessage = async (channel: any, binding_key: any, message: any) => {
+export const PublishMessage = async (
+  channel: any,
+  service: any,
+  message: string
+) => {
   try {
     await channel.publish(
       process.env.EXCHANGE_NAME,
-      message,
-      binding_key,
+      service,
       Buffer.from(message)
     );
+    console.log("Sent: ", message);
   } catch (err: any) {
     throw new AppError(500, err?.message);
   }
 };
 
-export const SubscribeMessage = async (channel: any, service: any, binding_key: any) => {
-  const appQueue = new channel.assertQueue('QUEUE_NAME');
+export const SubscribeMessage = async (
+  channel: any,
+  service: any,
+  binding_key: any
+) => {
+  const appQueue = new channel.assertQueue("QUEUE_NAME");
 
   channel.bindQueue(appQueue.queue, process.env.EXCHANGE_NAME, binding_key);
 
@@ -68,4 +79,3 @@ export const SubscribeMessage = async (channel: any, service: any, binding_key: 
     channel.ack(data);
   });
 };
-

@@ -1,4 +1,5 @@
 import http from "http";
+import express from "express";
 import { Logging } from "@sfroads/common";
 import connectDB, { SERVER_PORT } from "./DB/connectDB";
 import createServer from "./app";
@@ -40,7 +41,8 @@ const start = async () => {
   // consumer()
   // const consume = "Ticket:Created"
   //consumer(consume, consumer)
-  const app = createServer();
+  const app = express();
+  createServer(app,channel);
 
   http
     .createServer(app)
@@ -48,5 +50,4 @@ const start = async () => {
       Logging.info(`Auth Server is running on port ${SERVER_PORT}!!`)
     );
 };
-
 start();

@@ -79,7 +79,6 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       if (error) {
         throw new AppError(StatusCodes.NOT_FOUND, error);
       }
-
       user = new User({
         fullName,
         phoneNumber,
@@ -87,8 +86,16 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         password,
         plateNumber,
         NIN,
-        userType: "Offender",
       });
+
+      const newUserType = new UserType({
+        userId: user._id,
+        userType: "Offender",
+        createdAt: Date.now(),
+      });
+      const savedUserType = await newUserType.save();
+      user.userType.push(savedUserType);
+
     }
     //user.password = await encryptPassword(user.password);
 
