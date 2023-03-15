@@ -1,4 +1,3 @@
-import createServer from "../app";
 import * as db from "./dbHandler";
 
 
