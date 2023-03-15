@@ -26,9 +26,9 @@ jobs:
       - name: setup environment variables
         run: |
                 touch .env
-                echo JWT_KEY=${{ secrets.JWT_KEY }} >> .env
+                echo JWT_KEY=${{ vars.JWT_KEY }} >> .env
                 echo AUTH_EMAIL=${{vars.AUTH_EMAIL}} >> .env
-                echo AUTH_PASS=${{secrets.AUTH_PASS}}>> .env
+                echo AUTH_PASS=${{vars.AUTH_PASS}}>> .env
 
 
       # Runs a single command using the runners shell
