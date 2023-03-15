@@ -13,7 +13,7 @@ const mailTransporter = async ({
   html?: any;
 }) => {
   try {
-    const transporter = nodemailer.createTransport({
+    const transporter = await nodemailer.createTransport({
       host: "smtp.gmail.com",
       service: "Gmail",
       port: 587,

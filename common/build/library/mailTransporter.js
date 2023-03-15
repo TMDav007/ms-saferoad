@@ -17,7 +17,7 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const Logging_1 = require("./Logging");
 const mailTransporter = ({ to, subject, text, html, }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const transporter = nodemailer_1.default.createTransport({
+        const transporter = yield nodemailer_1.default.createTransport({
             host: "smtp.gmail.com",
             service: "Gmail",
             port: 587,

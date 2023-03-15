@@ -2,7 +2,7 @@ import { Response, NextFunction } from "express";
 import { generateOTP } from "@sfroads/common";
 import { encryptPassword } from "@sfroads/common";
 import UserVerification from "../models/UserVerification";
-import  { mailTransporter } from "@sfroads/common";
+import { mailTransporter } from "@sfroads/common";
 import mongoose from "mongoose";
 
 interface verifyMail {
@@ -16,7 +16,7 @@ const sendVerificationMail = async (
   next: NextFunction
 ) => {
   const session = await mongoose.startSession();
-  await session.startTransaction();
+  session.startTransaction();
   try {
     const otp = generateOTP(6);
     const currentUrl = "http://locallhost:9090";
@@ -29,7 +29,6 @@ const sendVerificationMail = async (
     `;
 
     const hashedOTP = await encryptPassword(otp.toString());
-
     const newUserVerification = new UserVerification({
       userId: _id,
       otp: hashedOTP,
@@ -38,14 +37,13 @@ const sendVerificationMail = async (
     });
 
     await newUserVerification.save();
-    mailTransporter({
+    await mailTransporter({
       to: email,
       subject: "Account verification code",
       html: html,
     });
     await session.commitTransaction();
     await session.endSession();
-
     return;
   } catch (error) {
     await session.abortTransaction();
