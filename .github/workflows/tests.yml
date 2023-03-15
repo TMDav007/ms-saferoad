@@ -23,7 +23,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: setup environment variables
+        run: |
+                touch .env
+                echo JWT_KEY=${{ secrets.JWT_KEY }} >> .env
+                echo AUTH_EMAIL=${{vars.AUTH_EMAIL}} >> .env
+                echo AUTH_PASS=${{secrets.AUTH_PASS}}>> .env
+
+
       # Runs a single command using the runners shell
       - name: Run test for user service
+
         run: cd users && npm install && npm run test:ci
 
