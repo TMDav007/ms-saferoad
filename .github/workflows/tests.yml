@@ -20,7 +20,6 @@ env:
   AUTH_JWT: ${{vars.AUTH_PASS}}
 
 
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -30,12 +29,14 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - run: echo 'Hi ${{ env.JWT_KEY }}'
-      - run: echo 'Hi ${{ env.AUTH_EMAIL }}'
-      - run: echo 'Hi ${{ env.AUTH_JWT}}'
       - uses: actions/checkout@v3
-
+      - name: Check env file
+        run: |
+          echo "repository variable : ${{ env.JWT_KEY  }}"
+          echo "organization variable : ${{ env.AUTH_EMAIL }}"
+          echo "overridden variable : ${{ env.AUTH_JWT }}"
+          echo "variable from shell environment : $env_var"
+      
       # Runs a single command using the runners shell
       - name: Run test for user service
 
