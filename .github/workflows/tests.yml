@@ -26,10 +26,10 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
+          envkey_DEBUG: false
           envkey_JWT_KEY: ${{vars.JWT_KEY}}
           envKey_AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
           envKey_AUTH_PASS: ${{vars.AUTH_PASS}}
-          directory: './'
           file_name: '.env'
 
       # Runs a single command using the runners shell
