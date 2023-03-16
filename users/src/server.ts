@@ -33,7 +33,7 @@ const AMQP_URL = process.env.AMQP_URL!;
 const QUEUE_NAME = "saferoad";
 
 // export const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME);
-const start = async () => {
+export const start = async () => {
   const channel = await CreateChannel();
   connectDB();
 
