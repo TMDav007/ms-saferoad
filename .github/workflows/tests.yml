@@ -8,11 +8,6 @@ on:
   pull_request:
     paths: "users/**"
 
-env:
-  # Setting an environment variable with the value of a configuration variable
-  JWT_KEY: ytsdfhji
-  AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
-  AUTH_JWT: ${{vars.AUTH_PASS}}
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -22,7 +17,11 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: JWT_KEY
-
+    env:
+  # Setting an environment variable with the value of a configuration variable
+        JWT_KEY: ${{vars.JWT_KEY}}
+        AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
+        AUTH_PASS: ${{vars.AUTH_PASS}}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -32,7 +31,7 @@ jobs:
         run: |
               echo "repository variable : ${{ vars.JWT_KEY  }}"
               echo "organization variable : ${{ vars.AUTH_EMAIL }}"
-              echo "overridden variable : ${{ vars.AUTH_JWT }}"
+              echo "overridden variable : ${{ vars.AUTH_PASS }}"
       # Runs a single command using the runners shell
       - name: Run test for user service
 
