@@ -2,6 +2,8 @@
 name: Deploy to aws
 
 on:
+  push:
+    branches: ["dev"]
   pull_request:
     branches: [ "master","dev" ]
 
@@ -10,11 +12,6 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: JWT_KEY
-    env:
-  # Setting an environment variable with the value of a configuration variable
-        JWT_KEY: ${{vars.JWT_KEY}}
-        AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
-        AUTH_PASS: ${{vars.AUTH_PASS}}
 
     steps:
     - name: Checkout Source Code
@@ -27,7 +24,33 @@ jobs:
         echo JWT_KEY= ${{vars.JWT_KEY}} >> .env
         echo AUTH_EMAIL= ${{vars.AUTH_EMAIL}} >> .env
         echo AUTH_PASS= ${{vars.AUTH_PASS}} >> .env
-        echo PORT = 8001
+        echo JWTSECRET= ${{vars.JWTSECRET}} >> .env
+        echo AMQP_URL= ${{vars.AMQP_URL}} >> .env
+        echo EXCHANGE_NAME= ${{vars.EXCHANGE_NAME}} >> .env
+        echo USER_BINDING_KEY= ${{vars.USER_BINDING_KEY}} >> .env
+        echo TICKET_BINDING_KEY= ${{vars.TICKET_BINDING_KEY}} >> .env
+        echo TWILIO_ACCOUNT_SID = ${{vars.TWILIO_ACCOUNT_SID }} >> .env
+        echo TWILIO_AUTH_TOKEN = ${{vars.TWILIO_AUTH_TOKEN}} >> .env
+        echo TWILIO_PHONE_NUMBER= ${{vars.TWILIO_PHONE_NUMBER}} >> .env
+        echo SERVER_PORT = 8001
+        cat .env
+        
+    - name: Create Tickets Env file
+      working-directory: ./users
+      run: |
+        touch .env
+        echo JWT_KEY= ${{vars.JWT_KEY}} >> .env
+        echo AUTH_EMAIL= ${{vars.AUTH_EMAIL}} >> .env
+        echo AUTH_PASS= ${{vars.AUTH_PASS}} >> .env
+        echo JWTSECRET= ${{vars.JWTSECRET}} >> .env
+        echo AMQP_URL= ${{vars.AMQP_URL}} >> .env
+        echo EXCHANGE_NAME= ${{vars.EXCHANGE_NAME}} >> .env
+        echo USER_BINDING_KEY= ${{vars.USER_BINDING_KEY}} >> .env
+        echo TICKET_BINDING_KEY= ${{vars.TICKET_BINDING_KEY}} >> .env
+        echo TWILIO_ACCOUNT_SID = ${{vars.TWILIO_ACCOUNT_SID }} >> .env
+        echo TWILIO_AUTH_TOKEN = ${{vars.TWILIO_AUTH_TOKEN}} >> .env
+        echo TWILIO_PHONE_NUMBER= ${{vars.TWILIO_PHONE_NUMBER}} >> .env
+        echo SERVER_PORT = 8002
         cat .env
         
     - name: Generate deployemnt package
