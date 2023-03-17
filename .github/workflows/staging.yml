@@ -66,6 +66,6 @@ jobs:
         application_name: saferoad-dev
         environment_name: Saferoaddev-env
         version_labe: "ver-${{ github.sha}}"
-        region: eu-central-1
+        region: us-east-1
         deployment_package: deploy.zip
       
