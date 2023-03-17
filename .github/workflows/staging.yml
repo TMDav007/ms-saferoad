@@ -68,7 +68,7 @@ jobs:
         aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
         application_name: saferoad-dev
         environment_name: Saferoaddev-env
-        version_labe: "ver-${{ github.sha}}"
+        version_label: "ver-${{ github.sha}}"
         region: us-east-1
         deployment_package: deploy.zip
       
