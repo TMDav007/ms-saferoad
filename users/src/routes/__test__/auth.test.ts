@@ -3,7 +3,6 @@ import express from "express";
 import createServer from "../../app";
 
 const app = express();
-
 const server = createServer(app);
 
 describe("Auth - Signup", () => {
