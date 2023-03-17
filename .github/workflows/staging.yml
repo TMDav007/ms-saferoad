@@ -1,12 +1,12 @@
 
-name: CI
+name: Deploy to aws
 
 on:
   pull_request:
     branches: [ "master","dev" ]
 
 jobs:
-  CI-verification:
+  deploy_on_qa:
 
     runs-on: ubuntu-latest
     environment: JWT_KEY
@@ -16,21 +16,33 @@ jobs:
         AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
         AUTH_PASS: ${{vars.AUTH_PASS}}
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-       
-    - name: Test User Service
+    - name: Checkout Source Code
+      uses: actions/checkout@v3
+      
+    - name: Create User Env file
       working-directory: ./users
       run: |
-        npm install
-        npm run test:ci
+        touch .env
+        echo JWT_KEY= ${{vars.JWT_KEY}} >> .env
+        echo AUTH_EMAIL= ${{vars.AUTH_EMAIL}} >> .env
+        echo AUTH_PASS= ${{vars.AUTH_PASS}} >> .env
+        echo PORT = 8001
+        cat .env
+        
+    - name: Generate deployemnt package
+      run: |
+        zip -r deploy.zip . -x '*.git'
+
+       
+    - name: Deploy on Elastic beanstalk QA Env
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
+        aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
+        application_name: saferoad-dev
+        environment_name: Saferoaddev-env
+        version_labe: "ver-${{ github.sha}}"
+        region: eu-central-1
+        deployment_package: deploy.zip
       
