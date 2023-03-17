@@ -1,4 +1,4 @@
-import twilio from "twilio";
+import { Twilio } from "twilio"
 import jwt from "jsonwebtoken";
 import { AnyObject } from "mongoose";
 import UserVerification from "../models/UserVerification";
@@ -8,7 +8,7 @@ export const smsOtp = async (otp: number, user: AnyObject) => {
   const accountSid = process.env.TWILIO_ACCOUNT_SID as string;
   const authToken = process.env.TWILIO_AUTH_TOKEN as string;
   const twilioNumber = process.env.TWILIO_PHONE_NUMBER as string;
-  const client = twilio(accountSid, authToken);
+  const client = new Twilio(accountSid, authToken);
   const response = await client.messages.create({
     body: `your OTP is ${otp}`,
     from: twilioNumber,
