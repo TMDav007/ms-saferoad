@@ -46,7 +46,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       }));
     const existingNIN = NIN && (await User.findOne({ NIN }));
     if (existingEmail || existingPhoneNumber || existingNIN || existingWIP) {
-      // throw new AppError(StatusCodes.CONFLICT, "User already exists");
+      throw new AppError(StatusCodes.CONFLICT, "User already exists");
       //await User.findByIdAndDelete(existingEmail.id);
     }
 
