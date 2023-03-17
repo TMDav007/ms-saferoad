@@ -38,6 +38,8 @@ jobs:
     - name: Create Tickets Env file
       working-directory: ./users
       run: |
+        echo "repository key : ${{secrets.AWS_ACCESS_KEY}} "
+        echo "repository secrest : ${{secrets.AWS_ACCESS_SECRET}}"
         touch .env
         echo JWT_KEY= ${{vars.JWT_KEY}} >> .env
         echo AUTH_EMAIL= ${{vars.AUTH_EMAIL}} >> .env
@@ -60,6 +62,7 @@ jobs:
        
     - name: Deploy on Elastic beanstalk QA Env
       uses: einaregilsson/beanstalk-deploy@v21
+  
       with:
         aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
         aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
