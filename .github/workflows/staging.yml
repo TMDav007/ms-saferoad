@@ -1,0 +1,36 @@
+
+name: Node.js CI
+
+on:
+  pull_request:
+    branches: [ "master","dev" ]
+
+jobs:
+  CI-verification:
+
+    runs-on: ubuntu-latest
+    environment: JWT_KEY
+    env:
+  # Setting an environment variable with the value of a configuration variable
+        JWT_KEY: ${{vars.JWT_KEY}}
+        AUTH_EMAIL: ${{vars.AUTH_EMAIL}}
+        AUTH_PASS: ${{vars.AUTH_PASS}}
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+       
+    - name: Test User Service
+      working-directory: ./users
+      run: |
+        npm install
+        npm run test:ci
+      
