@@ -1,14 +1,15 @@
-FROM node:alpine
+FROM node
 
-WORKDIR /app
+WORKDIR /app/users
 
 COPY package*.json .
 
 RUN npm install
-RUN npm install -g nodemon
 COPY . .
 
-CMD ["nodemon"]
+EXPOSE 8001
+
+CMD ["npm", "start"]
 
 # RUN npm run build
 

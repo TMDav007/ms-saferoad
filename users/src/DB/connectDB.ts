@@ -14,6 +14,6 @@ const connectDB = async () => {
 };
 export const SERVER_PORT = (process.env.SERVER_PORT as string)
   ? Number(process.env.SERVER_PORT as string)
-  : 1337;
+  : 8001;
 
 export default connectDB;

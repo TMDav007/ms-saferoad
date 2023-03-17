@@ -50,8 +50,9 @@ const UserSchema = new Schema<IUser>({
   },
   userType: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      enum: ["Civilian", "Offender", "Officer", "Lawyer"],
+      default: "Civilian",
     },
   ],
   ticket: [

@@ -37,7 +37,7 @@ export interface IUser {
   verified?: boolean;
   status: string;
   isSignup: Boolean;
-  userType: Array<IUserTypes>;
+  userType: string;
   ticket: Array<ITicket>;
   confirmationCode: string;
   passwordResetExpires: Date;
