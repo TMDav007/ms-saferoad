@@ -36,10 +36,8 @@ jobs:
         cat .env
         
     - name: Create Tickets Env file
-      working-directory: ./users
+      working-directory: ./tickets
       run: |
-        echo "repository key : ${{secrets.AWS_ACCESS_KEY}} "
-        echo "repository secrest : ${{secrets.AWS_ACCESS_SECRET}}"
         touch .env
         echo JWT_KEY= ${{vars.JWT_KEY}} >> .env
         echo AUTH_EMAIL= ${{vars.AUTH_EMAIL}} >> .env
