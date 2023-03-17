@@ -5,9 +5,10 @@
 	"main": "src/server.ts",
 	"scripts": {
 		"build": "rimraf ./build && tsc",
-		"start": "node build/server.js",
+		"start": "npm run build && node ./build/server.js",
 		"dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "jest --watchAll --no-cache",
+		"test:ci": "jest"
 	},
 	"author": "",
 	"license": "ISC",

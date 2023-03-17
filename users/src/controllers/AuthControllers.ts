@@ -1,4 +1,6 @@
 import User from "../models/User";
+import { generateOTP } from "@sfroads/common";
+import { smsOtp, GenerateSignature, Authenticate } from "../library/smsOtp";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
@@ -12,11 +14,11 @@ import {
 import sendVerificationMail from "../library/verificationEmail";
 import UserVerification from "../models/UserVerification";
 import { decryptPass } from "@sfroads/common";
-import UserType from "../models/UserType";
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let user: any;
+    let otp = generateOTP(4);
     let { WIP, NIN, fullName, email, phoneNumber, password } = req.body;
 
     const valid: any = validateSignupData(req.body);
@@ -32,36 +34,37 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       (await User.findOne({
         email: email,
       }));
+    const existingPhoneNumber =
+      phoneNumber &&
+      (await User.findOne({
+        phoneNumber: phoneNumber,
+      }));
     const existingWIP =
       WIP &&
       (await User.findOne({
         WIP,
       }));
     const existingNIN = NIN && (await User.findOne({ NIN }));
-    if (existingEmail || existingNIN || existingWIP) {
-        throw new AppError(StatusCodes.CONFLICT, "User already exists");
+    if (existingEmail || existingPhoneNumber || existingNIN || existingWIP) {
+      throw new AppError(StatusCodes.CONFLICT, "User already exists");
       //await User.findByIdAndDelete(existingEmail.id);
     }
+
+    console.log(existingPhoneNumber, "phoneNumber");
 
     if (!WIP && !NIN) {
       user = new User({
         fullName,
         phoneNumber,
+        otp,
         email,
         isSignup: true,
       });
-      const newUserType = new UserType({
-        userId: user._id,
-        userType: "Normal",
-        createdAt: Date.now(),
-      });
-      const savedUserType = await newUserType.save();
-      user.userType.push(savedUserType);
     }
     if (WIP) {
       const { fullName, phoneNumber, state, error } = getPoliceDetails(WIP);
       if (error) {
-        throw new AppError(StatusCodes.NOT_FOUND, error);
+        throw new AppError(StatusCodes.NOT_FOUND, error as string);
       }
       user = new User({
         fullName,
@@ -77,41 +80,52 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       const { fullName, email, phoneNumber, plateNumber, error } =
         getOffendersDetails(NIN);
       if (error) {
-        throw new AppError(StatusCodes.NOT_FOUND, error);
+        throw new AppError(StatusCodes.NOT_FOUND, error as string);
       }
       user = new User({
         fullName,
         phoneNumber,
         email,
+        userType: "Offender",
         password,
         plateNumber,
         NIN,
       });
-
-      const newUserType = new UserType({
-        userId: user._id,
-        userType: "Offender",
-        createdAt: Date.now(),
-      });
-      const savedUserType = await newUserType.save();
-      user.userType.push(savedUserType);
-
     }
     //user.password = await encryptPassword(user.password);
 
-    await sendVerificationMail({ _id: user._id, email: user.email }, res, next);
+    let signature = "";
+    if (email) {
+      email &&
+        (await sendVerificationMail(
+          { _id: user._id, email: user.email },
+          res,
+          next
+        ));
+    }
+
+    if (phoneNumber) {
+      phoneNumber && (await smsOtp(otp, user));
+      signature = GenerateSignature({
+        otp,
+        phoneNumber,
+        userId: user._id,
+        verified: user.verified,
+      });
+    }
 
     await user.save();
-    await user.populate({
-      path: "userType",
-      model: "UserTypeSchema",
-    });
+    // await user.populate({
+    //   path: "userType",
+    //   model: "UserTypeSchema",
+    // });
 
     //Generate JWT
     const userJwt = jwt.sign(
       {
         id: user._id,
         email: user.email,
+        phone: user.phoneNumber,
       },
       process.env.JWT_KEY!
     );
@@ -123,10 +137,10 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       message:
         "Signup was successful. Kindly check your email to activate your account",
       success: true,
+      signature,
       data: user,
     });
   } catch (error) {
-    console.log("signuperror");
     next(error);
   }
 };

@@ -7,7 +7,7 @@ import { UserRoute } from "../routes/userRoute";
 
 const v1 = Router();
 export default (app: any, channel: any) => {
-  //SubscribeMessage(channel, SubscribeEvents);
+ //SubscribeMessage(channel, SubscribeEvents);
   app.get("/", (_req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome to safe road API entry point" });
   });

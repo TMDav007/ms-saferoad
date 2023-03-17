@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import express from "express";
-
 import createServer from "../../app";
 
 const app = express();
