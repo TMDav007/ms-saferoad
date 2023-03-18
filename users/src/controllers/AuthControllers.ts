@@ -1,5 +1,5 @@
 import User from "../models/User";
-import { generateOTP } from "@sfroads/common";
+import { generateOTP } from "./../library/generateOTP";
 import { smsOtp, GenerateSignature, Authenticate } from "../library/smsOtp";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
@@ -46,8 +46,8 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       }));
     const existingNIN = NIN && (await User.findOne({ NIN }));
     if (existingEmail || existingPhoneNumber || existingNIN || existingWIP) {
-      throw new AppError(StatusCodes.CONFLICT, "User already exists");
-      //await User.findByIdAndDelete(existingEmail.id);
+      // throw new AppError(StatusCodes.CONFLICT, "User already exists");
+      await User.findByIdAndDelete(existingEmail.id);
     }
 
     console.log(existingPhoneNumber, "phoneNumber");
@@ -145,6 +145,41 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const resendOtp = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let { email } = req.body;
+
+    email = email?.toLowerCase();
+    const existingEmail =
+      email &&
+      (await User.findOne({
+        email: email,
+      }));
+
+    if (!existingEmail) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "User does not exist");
+    }
+
+    if (existingEmail.verified) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "User has been verified");
+    }
+
+    await sendVerificationMail(
+      { _id: existingEmail._id, email: existingEmail.email },
+      res,
+      next
+    );
+
+    return res.status(StatusCodes.CREATED).json({
+      message: "OTP resent. Kindly check your email to activate your account",
+      success: true,
+      data: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const verifyAccount = async (
   req: Request,
   res: Response,
@@ -176,7 +211,10 @@ const verifyAccount = async (
       );
     }
 
-    const isOTPValid = await decryptPass(otp.toString(), isUserVerify[0].otp);
+    const isOTPValid = await decryptPass(
+      otp.toString(),
+      isUserVerify[isUserVerify.length - 1].otp
+    );
     if (!isOTPValid) {
       throw new AppError(
         StatusCodes.BAD_REQUEST,
@@ -192,10 +230,7 @@ const verifyAccount = async (
         new: true,
         runValidators: true,
       }
-    ).populate({
-      path: "userType",
-      model: "UserTypeSchema",
-    });
+    );
 
     //Generate JWT
     const userJwt = jwt.sign(
@@ -214,6 +249,7 @@ const verifyAccount = async (
     return res.status(StatusCodes.OK).json({
       message: "Account verified successfully",
       success: true,
+
       data: null,
     });
   } catch (error) {
@@ -225,4 +261,4 @@ const signout = async (req: Request, res: Response, next: NextFunction) => {
   req.session = null;
   res.send({});
 };
-export { signup, verifyAccount, signout };
+export { signup, verifyAccount, signout, resendOtp };

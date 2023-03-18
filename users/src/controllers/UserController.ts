@@ -5,10 +5,7 @@ import { NextFunction, Request, Response } from "express";
 
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const allUsers = await User.find().populate({
-      path: "userType",
-      model: "UserTypeSchema",
-    });
+    const allUsers = await User.find();
     return res.status(StatusCodes.OK).json({
       message: "Request was successfully",
       success: true,

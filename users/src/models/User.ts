@@ -48,13 +48,12 @@ const UserSchema = new Schema<IUser>({
     type: Boolean,
     default: false,
   },
-  userType: [
-    {
-      type: String,
-      enum: ["Civilian", "Offender", "Officer", "Lawyer"],
-      default: "Civilian",
-    },
-  ],
+  userType: {
+    type: String,
+    enum: ["Civilian", "Offender", "Officer", "Lawyer"],
+    default: "Civilian",
+  },
+
   ticket: [
     {
       _id: {

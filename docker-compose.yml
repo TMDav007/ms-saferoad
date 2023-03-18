@@ -42,3 +42,4 @@ services:
       - tickets
     ports:
       - "80:80"
+      
