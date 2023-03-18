@@ -1,9 +1,13 @@
-
-export interface UserPayload {
-	id: string;
-	email: string;
-	verified: boolean;
-	userType: string;
+export interface JWTPayload {
+  id?: string;
+  userId: string;
+  fullName: string;
+  phoneNumber?: string;
+  email?: string;
+  verified: boolean;
+  status: string;
+  isSignup: boolean;
+  userType: string;
 }
 
 export interface JwtPayload {
