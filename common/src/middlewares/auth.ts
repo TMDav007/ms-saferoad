@@ -14,7 +14,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer")) {
     return res.status(401).send({
-      message: "unauthorized",
+      message: "Unauthorized",
       success: false,
       data: null,
     });
