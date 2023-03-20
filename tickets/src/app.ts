@@ -9,7 +9,7 @@ import { errorHandler } from "@sfroads/common";
 import v1 from "./utils/v1";
 import ticket from "./api/ticket";
 
-const createServer = (app: any, channel: any) => {
+const createServer = (app?: any, channel?: any) => {
   if (!process.env.MONGO_URI) {
     throw new AppError(500, "MONGO_URI must be defined");
   }
@@ -43,12 +43,11 @@ const createServer = (app: any, channel: any) => {
       })
     )
     .use(currentUser);
-  ticket(app, channel);
+  v1(app, channel);
   app
     .get("/ping", (_req: Request, res: Response) =>
       res.status(200).json({ message: "ping" })
     )
-    .use("/api/v1", v1)
     .use(not_found)
     .use(errorHandler);
   return app;

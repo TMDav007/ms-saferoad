@@ -1,6 +1,5 @@
 import express, { Response, Request } from "express";
 import cors from "cors";
-import amqplib from "amqplib";
 import cookieSession from "cookie-session";
 import helmet from "helmet";
 import morgan from "morgan";

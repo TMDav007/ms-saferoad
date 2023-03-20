@@ -1,11 +1,11 @@
 import express from "express";
-import { getAllUsers, getCurrentUser } from "../controllers/UserController";
-import { currentUser } from "@sfroads/common";
-import { requireAuth } from "@sfroads/common";
+import { getAllUsers, getCurrentUser } from "../controllers/UserController";;
+import { auth } from "@sfroads/common";
+import { requireOfficerAuth } from "../middlewares/require-auth";
 
 const UserRoute = express.Router();
 
 UserRoute.get("/allUsers", getAllUsers);
-UserRoute.get("/currentUser", currentUser, requireAuth, getCurrentUser);
+UserRoute.get("/currentUser", auth, requireOfficerAuth, getCurrentUser);
 
 export { UserRoute };

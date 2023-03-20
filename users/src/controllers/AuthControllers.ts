@@ -1,19 +1,17 @@
 import User from "../models/User";
-import { generateOTP } from "./../library/generateOTP";
 import { smsOtp, GenerateSignature, Authenticate } from "../library/smsOtp";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { getPoliceDetails, policeData } from "../data/policeDummyData";
 import { getOffendersDetails } from "../data/NINDummyData";
-import { AppError } from "@sfroads/common";
 import {
   validateAccountVerify,
   validateSignupData,
 } from "../utils/validations";
 import sendVerificationMail from "../library/verificationEmail";
 import UserVerification from "../models/UserVerification";
-import { decryptPass } from "@sfroads/common";
+import { createToken, decryptPass, AppError, generateOTP } from "@sfroads/common";
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -46,11 +44,9 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       }));
     const existingNIN = NIN && (await User.findOne({ NIN }));
     if (existingEmail || existingPhoneNumber || existingNIN || existingWIP) {
-      // throw new AppError(StatusCodes.CONFLICT, "User already exists");
-      await User.findByIdAndDelete(existingEmail.id);
+      throw new AppError(StatusCodes.CONFLICT, "User already exists");
+      //await User.findByIdAndDelete(existingEmail.id);
     }
-
-    console.log(existingPhoneNumber, "phoneNumber");
 
     if (!WIP && !NIN) {
       user = new User({
@@ -114,7 +110,9 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    await user.save();
+    console.log(user, "usesss")
+
+   // await user.save();
     // await user.populate({
     //   path: "userType",
     //   model: "UserTypeSchema",
@@ -132,7 +130,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
     // Store it on session object
     req.session!["jwt"] = userJwt;
-
+    console.log(req);
     return res.status(StatusCodes.CREATED).json({
       message:
         "Signup was successful. Kindly check your email to activate your account",
@@ -238,10 +236,12 @@ const verifyAccount = async (
         id: user?._id,
         email: user?.email,
         verified: user.verified,
-        userType: user.userType[0].userType,
+        userType: user.userType,
       },
       process.env.JWT_KEY!
     );
+
+    const token = createToken(user);
 
     // Store it on session object
     req.session!["jwt"] = userJwt;
@@ -249,8 +249,7 @@ const verifyAccount = async (
     return res.status(StatusCodes.OK).json({
       message: "Account verified successfully",
       success: true,
-
-      data: null,
+      token,
     });
   } catch (error) {
     next(error);

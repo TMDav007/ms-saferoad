@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../middlewares/error-middleware";
+import { AppError } from "./error-middleware";
 
 export const requireAuth = (
   req: Request,
@@ -17,7 +17,8 @@ export const requireOfficerAuth = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req?.currentUser?.userType !== "Officer") {
+  console.log(req, "user")
+  if (req?.user?.userType !== "Officer") {
     throw new AppError(403, "Not authorized!!!");
   }
   next();

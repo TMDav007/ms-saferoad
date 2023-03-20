@@ -8,23 +8,24 @@ export interface IUserTypes {
 
 export interface ITicket {
   id: string;
-	offenderIDNumber: string;
-	offenderName:string;
-	createdBy: string;
-	plateNumber: string;
+  offenderIDNumber: string;
+  offenderName: string;
+  createdBy: string;
+  plateNumber: string;
   offense: string;
   price: string;
-	carType: string;
-	carModel: string;
-	offenderPhoneNumber: string;
-	evidenceUrl?: string;
-	evidenceCloudinaryId?: string;
-	status: string;
-	createdAt: Date;
-	updatedAt: Date;
+  carType: string;
+  carModel: string;
+  offenderPhoneNumber: string;
+  evidenceUrl?: string;
+  evidenceCloudinaryId?: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IUser {
+  id: string;
   fullName?: string;
   email?: string;
   password?: string;
@@ -90,6 +91,18 @@ export interface UserPayload {
   id: string;
   email: string;
   verified: boolean;
+  userType: string;
+}
+
+export interface JTPayload {
+  userId: string;
+  fullName: string;
+  phoneNumber?: string;
+  email?: string;
+  verified: boolean;
+  status: string;
+  isSignup: boolean;
+  userType: string;
 }
 
 export interface JwtPayload {
@@ -98,6 +111,7 @@ export interface JwtPayload {
   currentUser: string;
   email: string;
   verified: boolean;
+  jwt?: string;
   sub?: string | undefined;
   exp?: number | undefined;
   nbf?: number | undefined;

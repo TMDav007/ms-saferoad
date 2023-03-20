@@ -6,7 +6,7 @@ const requireAuth = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.currentUser) {
+  if (!req.user) {
     throw new AppError(401, "User not authenticated");
   }
   next();

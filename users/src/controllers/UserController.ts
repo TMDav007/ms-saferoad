@@ -17,12 +17,13 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getCurrentUser = (req: Request, res: Response, next: NextFunction) => {
+  //console.log(req)
   const msg = {
     action: "LOGIN",
-    data: req?.currentUser,
+    data: req?.user,
   };
   // producer(JSON.stringify(msg));
-  return res.send({ currentUser: req?.currentUser || null });
+  return res.send({ user: req?.user || null });
 };
 
 export { getAllUsers, getCurrentUser };

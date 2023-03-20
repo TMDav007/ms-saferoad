@@ -5,18 +5,19 @@ import ticket from "../api/ticket";
 
 const v1 = Router();
 
-v1.get("/tickets", (_req: Request, res: Response) => {
-  res
-    .status(200)
-    .json({ message: "Welcome to safe road API Ticket Service enter point" });
-});
+export default (app: any, channel: any) => {
+  // app.get("/api/v1/ticket", (_req: Request, res: Response) => {
+  //   res
+  //     .status(200)
+  //     .json({ message: "Welcome to safe road API Ticket Service enter point" });
+  // });
 
-v1.use((req: Request, _res: Response, next: NextFunction) => {
-  Logging.info(
-    `Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`
-  );
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    Logging.info(
+      `Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${req.statusCode}]`
+    );
 
-  next();
-});
-
-export default v1 ;
+    next();
+  });
+  ticket(app, channel);
+};

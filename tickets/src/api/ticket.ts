@@ -1,4 +1,4 @@
-import { AppError, requireAuth, requireOfficerAuth } from "@sfroads/common";
+import { AppError, requireAuth, requireOfficerAuth, auth } from "@sfroads/common";
 
 import { Router, Request, Response, NextFunction } from "express";
 
@@ -6,20 +6,20 @@ import { StatusCodes } from "http-status-codes";
 import TicketRepository from "../DB/repository/ticket-repository";
 import { PublishMessage } from "../producer";
 import { ITicket } from "../utils/types";
-import v1 from "../utils/v1";
+
 
 const ticket = new TicketRepository();
 export default (app: any, channel: any) => {
   // const q = app.Router()
   app.get("/api/v1/ticket", (_req: Request, res: Response) => {
-    console.log("jsdbjdsd");
     return res
       .status(200)
       .json({ message: "Welcome to safe road TICKET SERVICE entry point" });
   });
   app.post(
     "/api/v1/ticket",
-    requireAuth,
+    auth,
+    requireOfficerAuth,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const {
@@ -42,7 +42,6 @@ export default (app: any, channel: any) => {
           carModel,
           offenderPhoneNumber,
         });
-        
         const msg: any = {
           action: "Ticket:Created",
           data,
@@ -67,10 +66,10 @@ export default (app: any, channel: any) => {
 
   app.get(
     "/api/v1/ticket/allTickets",
-    requireAuth,
+    auth,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { data } = await ticket.findAllTickets();
+        const data = await ticket.findAllTickets();
         return res.status(StatusCodes.OK).json({
           message: "Request was successfully",
           success: true,
@@ -84,7 +83,7 @@ export default (app: any, channel: any) => {
 
   app.get(
     "/ticket/:id",
-    requireAuth,
+    auth,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const data = await ticket.findATicket(req.params.id);

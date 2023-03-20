@@ -21,7 +21,7 @@ export default class TicketRepository {
       const ticket = new Ticket({
         offenderIDNumber,
         offenderName,
-        createdBy: req.currentUser?.id,
+        createdBy: req.user?.userId,
         plateNumber,
         offense,
         price,
