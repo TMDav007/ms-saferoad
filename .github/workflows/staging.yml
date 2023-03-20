@@ -65,9 +65,8 @@ jobs:
       with:
         aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
         aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
-        use_existing_version_if_available: false
-        application_name: roaddy
-        environment_name: Roaddy-env
+        application_name: saferoad-dev
+        environment_name: Saferoaddev-env
         version_label: "ver-${{ github.sha}}"
         region: us-east-1
         deployment_package: deploy.zip
