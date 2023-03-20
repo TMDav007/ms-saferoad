@@ -6,6 +6,7 @@ on:
     branches: ["dev"]
   pull_request:
     branches: [ "master","dev" ]
+  workflow_dispatch:
 
 jobs:
   deploy_on_qa:
@@ -32,7 +33,7 @@ jobs:
         echo TWILIO_ACCOUNT_SID = ${{vars.TWILIO_ACCOUNT_SID }} >> .env
         echo TWILIO_AUTH_TOKEN = ${{vars.TWILIO_AUTH_TOKEN}} >> .env
         echo TWILIO_PHONE_NUMBER= ${{vars.TWILIO_PHONE_NUMBER}} >> .env
-        echo SERVER_PORT = 8001
+        echo SERVER_PORT=8001  >> .env
         cat .env
         
     - name: Create Tickets Env file
@@ -50,12 +51,12 @@ jobs:
         echo TWILIO_ACCOUNT_SID = ${{vars.TWILIO_ACCOUNT_SID }} >> .env
         echo TWILIO_AUTH_TOKEN = ${{vars.TWILIO_AUTH_TOKEN}} >> .env
         echo TWILIO_PHONE_NUMBER= ${{vars.TWILIO_PHONE_NUMBER}} >> .env
-        echo SERVER_PORT = 8002
+        echo SERVER_PORT=8002  >> .env
         cat .env
         
     - name: Generate deployemnt package
       run: |
-        zip -r deploy.zip . -x '*.git*'  -x 'skaffold.yaml'
+        zip -r deploy.zip . -x '*.git*'  -x 'skaffold.yaml' -x 'infra/**'
 
        
     - name: Deploy on Elastic beanstalk QA Env
@@ -65,8 +66,8 @@ jobs:
         aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
         aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
         use_existing_version_if_available: false
-        application_name: saferoad-dev
-        environment_name: Saferoaddev-env
+        application_name: roaddy
+        environment_name: Roaddy-env
         version_label: "ver-${{ github.sha}}"
         region: us-east-1
         deployment_package: deploy.zip
