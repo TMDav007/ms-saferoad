@@ -6,11 +6,11 @@ import ticket from "../api/ticket";
 const v1 = Router();
 
 export default (app: any, channel: any) => {
-  // app.get("/api/v1/ticket", (_req: Request, res: Response) => {
-  //   res
-  //     .status(200)
-  //     .json({ message: "Welcome to safe road API Ticket Service enter point" });
-  // });
+  app.get("/", (_req: Request, res: Response) => {
+    res
+      .status(200)
+      .json({ message: "Welcome to safe road API Ticket Service enter point" });
+  });
 
   app.use((req: Request, _res: Response, next: NextFunction) => {
     Logging.info(
