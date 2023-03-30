@@ -16,6 +16,11 @@ import { validateTicketData } from "../utils/validations";
 const ticket = new TicketRepository();
 export default (app: any, channel: any) => {
   // const q = app.Router()
+  app.get("/", (_req: Request, res: Response) => {
+    return res
+      .status(200)
+      .json({ message: "Welcome to safe road ticket entry point" });
+  })
   app.get("/api/v1/ticket", (_req: Request, res: Response) => {
     return res
       .status(200)
