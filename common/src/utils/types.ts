@@ -1,9 +1,8 @@
-
 export interface UserPayload {
-	id: string;
-	email: string;
-	verified: boolean;
-	userType: string;
+  id: string;
+  email: string;
+  verified: boolean;
+  userType: string;
 }
 
 export interface JWTPayload {
@@ -14,7 +13,8 @@ export interface JWTPayload {
   email?: string;
   verified: boolean;
   status: string;
-  idNum?: string
+  WID?: string;
+  NIN?: string;
   isSignup: boolean;
   userType: string;
 }

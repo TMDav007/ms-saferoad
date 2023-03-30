@@ -31,6 +31,8 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       verified: payload.verified,
       status: payload.status,
       isSignup: payload.isSignup,
+      NIN: payload.NIN,
+      WID: payload.WID,
       userType: payload.userType,
     };
     next();
