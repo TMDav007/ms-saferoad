@@ -11,6 +11,7 @@ export const createToken = (user: JWTPayload) => {
       email: user.email,
       isSignup: user.isSignup,
       status: user.status,
+      idNum: user.idNum,
       userType: user.userType,
     },
     process.env.JWTSECRET!,

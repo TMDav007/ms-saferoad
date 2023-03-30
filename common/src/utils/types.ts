@@ -14,6 +14,7 @@ export interface JWTPayload {
   email?: string;
   verified: boolean;
   status: string;
+  idNum?: string
   isSignup: boolean;
   userType: string;
 }
