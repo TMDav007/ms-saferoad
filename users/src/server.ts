@@ -8,6 +8,7 @@ import { natsWrapper } from "./nats-wrapper";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import createMQProducer from "./producer";
 import createMQConsumer, { CreateChannel } from "./consumer";
+import { mqWrapper } from "./listen";
 dotenv.config();
 
 // natsWrapper.connect(
@@ -31,6 +32,10 @@ dotenv.config();
 // export const producer = createMQProducer(AMQP_URL, QUEUE_NAME);
 const AMQP_URL = process.env.AMQP_URL!;
 const QUEUE_NAME = "saferoad";
+
+// mqWrapper.connect(AMQP_URL, QUEUE_NAME)
+
+// mqWrapper
 
 // export const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME);
 export const start = async () => {

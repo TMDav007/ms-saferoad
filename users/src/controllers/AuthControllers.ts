@@ -10,15 +10,21 @@ import {
   validateSignupData,
 } from "../utils/validations";
 import sendVerificationMail from "../library/verificationEmail";
+// import { createToken } from "../library/create_token";
 import UserVerification from "../models/UserVerification";
-import { createToken, decryptPass, AppError, generateOTP } from "@sfroads/common";
+import {
+  decryptPass,
+  AppError,
+  generateOTP,
+  encryptPassword,
+  createToken
+} from "@sfroads/common";
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let user: any;
     let otp = generateOTP(4);
-    let { WIP, NIN, fullName, email, phoneNumber, password } = req.body;
-
+    let { WID, NIN, fullName, email, phoneNumber, password } = req.body;
     const valid: any = validateSignupData(req.body);
     if (valid.error) {
       throw new AppError(
@@ -37,18 +43,18 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       (await User.findOne({
         phoneNumber: phoneNumber,
       }));
-    const existingWIP =
-      WIP &&
+    const existingWID =
+      WID &&
       (await User.findOne({
-        WIP,
+        WID,
       }));
     const existingNIN = NIN && (await User.findOne({ NIN }));
-    if (existingEmail || existingPhoneNumber || existingNIN || existingWIP) {
+    if (existingEmail || existingPhoneNumber || existingNIN || existingWID) {
       throw new AppError(StatusCodes.CONFLICT, "User already exists");
-      //await User.findByIdAndDelete(existingEmail.id);
+      // await User.findByIdAndDelete(existingEmail.id);
     }
 
-    if (!WIP && !NIN) {
+    if (!WID && !NIN) {
       user = new User({
         fullName,
         phoneNumber,
@@ -57,16 +63,18 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         isSignup: true,
       });
     }
-    if (WIP) {
-      const { fullName, phoneNumber, state, error } = getPoliceDetails(WIP);
+    if (WID) {
+      const { fullName, phoneNumber, state, error } = getPoliceDetails(WID);
       if (error) {
         throw new AppError(StatusCodes.NOT_FOUND, error as string);
       }
       user = new User({
         fullName,
         phoneNumber,
+        email,
         state,
-        WIP,
+        WID,
+        isSignup: true,
         password,
         userType: "Officer",
       });
@@ -82,13 +90,14 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         fullName,
         phoneNumber,
         email,
+        isSignup: true,
         userType: "Offender",
         password,
         plateNumber,
         NIN,
       });
     }
-    //user.password = await encryptPassword(user.password);
+    user.password = await encryptPassword(user.password);
 
     let signature = "";
     if (email) {
@@ -109,33 +118,30 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
         verified: user.verified,
       });
     }
-
-    console.log(user, "usesss")
-
-   // await user.save();
+    console.log(user);
+    await user.save();
     // await user.populate({
     //   path: "userType",
     //   model: "UserTypeSchema",
     // });
 
-    //Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-        phone: user.phoneNumber,
-      },
-      process.env.JWT_KEY!
-    );
+    // //Generate JWT
+    // const userJwt = jwt.sign(
+    //   {
+    //     id: user._id,
+    //     email: user.email,
+    //     phone: user.phoneNumber,
+    //   },
+    //   process.env.JWT_KEY!
+    // );
 
     // Store it on session object
-    req.session!["jwt"] = userJwt;
-    console.log(req);
+    // req.session!["jwt"] = userJwt;
+    // console.log(req);
     return res.status(StatusCodes.CREATED).json({
       message:
         "Signup was successful. Kindly check your email to activate your account",
       success: true,
-      signature,
       data: user,
     });
   } catch (error) {
@@ -235,12 +241,12 @@ const verifyAccount = async (
       {
         id: user?._id,
         email: user?.email,
-        verified: user.verified,
-        userType: user.userType,
+        verified: user?.verified,
+        userType: user?.userType,
+        idNum: user?.NIN || user?.WID,
       },
       process.env.JWT_KEY!
     );
-
     const token = createToken(user);
 
     // Store it on session object
@@ -256,8 +262,42 @@ const verifyAccount = async (
   }
 };
 
+const signIn = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let { NIN, WID, PASSWORD } = req.body;
+    let user;
+    if (NIN) {
+      user = NIN && (await User.findOne({ NIN }));
+    }
+    if (WID && PASSWORD) {
+      user = NIN && (await User.findOne({ WID }));
+    }
+    console.log(user)
+    //Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: user?._id,
+        email: user?.email,
+        verified: user?.verified,
+        userType: user?.userType,
+        idNum: user?.NIN || user?.WID,
+      },
+      process.env.JWT_KEY!
+    );
+
+    const token = createToken(user);
+    return res.status(StatusCodes.OK).json({
+      message: "Signin successfully",
+      success: true,
+      token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const signout = async (req: Request, res: Response, next: NextFunction) => {
   req.session = null;
   res.send({});
 };
-export { signup, verifyAccount, signout, resendOtp };
+export { signup, verifyAccount, signout, resendOtp, signIn };

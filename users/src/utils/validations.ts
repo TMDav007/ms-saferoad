@@ -2,28 +2,28 @@ import Joi from "joi";
 import { IAccountVerify, ISignup } from "./types";
 
 const validateSignupData = (signup: ISignup) => {
-	const signupSchema = Joi.object({
-		fullName: Joi.string().min(5).max(30),
-		phoneNumber: Joi.string(),
-		email: Joi.string().email(),
-		NIN: Joi.string().alphanum(),
-		WIP: Joi.string().alphanum(),
-		password: Joi.string().min(6).max(36),
-		confirmPassword: Joi.string().min(6).max(36).valid(Joi.ref("password")),
-	})
-		.xor("WIP", "NIN", "email", "phoneNumber");
-		//.and("email", "fullName");
+  const signupSchema = Joi.object({
+    fullName: Joi.string().min(5).max(30),
+    phoneNumber: Joi.string(),
+    email: Joi.string().email(),
+    NIN: Joi.string().alphanum(),
+    WID: Joi.string().alphanum(),
+    password: Joi.string().min(6).max(36)
+   // confirmPassword: Joi.string().min(6).max(36).valid(Joi.ref("password")),
+  })
+    .xor("WIP", "NIN", "email", "phoneNumber")
+    .and("email", "WID", "password");
 
-	return signupSchema.validate(signup);
+  return signupSchema.validate(signup);
 };
 
 const validateAccountVerify = (verifyAccount: IAccountVerify) => {
-	const accountVerifySchema = Joi.object({
-		otp: Joi.number().required(),
-		userId: Joi.string().required(),
-	});
+  const accountVerifySchema = Joi.object({
+    otp: Joi.number().required(),
+    userId: Joi.string().required(),
+  });
 
-	return accountVerifySchema.validate(verifyAccount);
+  return accountVerifySchema.validate(verifyAccount);
 };
 
 export { validateSignupData, validateAccountVerify };

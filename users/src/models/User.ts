@@ -26,7 +26,7 @@ const UserSchema = new Schema<IUser>({
   plateNumber: {
     type: String,
   },
-  WIP: {
+  WID: {
     type: String,
   },
   phoneNumber: {

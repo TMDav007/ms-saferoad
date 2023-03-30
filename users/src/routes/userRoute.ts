@@ -5,7 +5,7 @@ import { requireOfficerAuth } from "../middlewares/require-auth";
 
 const UserRoute = express.Router();
 
-UserRoute.get("/allUsers", getAllUsers);
+UserRoute.get("/users", getAllUsers);
 UserRoute.get("/currentUser", auth, requireOfficerAuth, getCurrentUser);
 
 export { UserRoute };

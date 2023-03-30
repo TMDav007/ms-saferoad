@@ -6,7 +6,10 @@ const TicketSchema = new Schema<ITicket>({
     type: String,
     required: true,
   },
-  offenderName: {
+  offenderFullName: {
+    type: String,
+  },
+  location: {
     type: String,
     required: true,
   },
@@ -37,6 +40,9 @@ const TicketSchema = new Schema<ITicket>({
   offenderPhoneNumber: {
     type: String,
   },
+  offenderEmail: {
+    type: String,
+  },
   evidenceUrl: {
     type: String,
     required: false,
@@ -49,13 +55,22 @@ const TicketSchema = new Schema<ITicket>({
     maxlength: 255,
     default: null,
   },
+  gracePeriod: {
+    type: String,
+  },
   status: {
     type: String,
-    enum: ["Unpaid", "Paid"],
-    default: "Unpaid",
+    enum: ["Pending", "Paid"],
+    default: "Pending",
   },
-  createdAt:  Date ,
-  updatedAt: Date ,
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 export default model("Ticket", TicketSchema);

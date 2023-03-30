@@ -1,16 +1,19 @@
 export interface ITicket {
-	id?: string
+	id?: string;
 	offenderIDNumber: string;
-	offenderName:string;
-	createdBy?: string;
+	offenderFullName?: string;
+	location: string;
+	createdBy: string;
 	plateNumber: string;
-	offense?: string;
-	price: string;
+	offense: string;
+	price?: string;
 	carType: string;
 	carModel: string;
-	offenderPhoneNumber: string;
+	offenderPhoneNumber?: string;
+	offenderEmail?: string;
 	evidenceUrl?: string;
 	evidenceCloudinaryId?: string;
+	gracePeriod?: string;
 	status?: string;
 	createdAt?: Date;
 	updatedAt?: Date;

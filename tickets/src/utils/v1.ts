@@ -6,7 +6,7 @@ import ticket from "../api/ticket";
 const v1 = Router();
 
 export default (app: any, channel: any) => {
-  app.get("/", (_req: Request, res: Response) => {
+  app.get("/whoami", (_req: Request, res: Response) => {
     res
       .status(200)
       .json({ message: "Welcome to safe road API Ticket Service enter point" });

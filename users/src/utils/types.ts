@@ -31,7 +31,7 @@ export interface IUser {
   password?: string;
   NIN?: string;
   plateNumber?: string;
-  WIP?: string;
+  WID?: string;
   phoneNumber?: string;
   address?: string;
   state?: string;
@@ -57,8 +57,9 @@ export interface NINDummyData {
 
 export interface IPoliceDummyData {
   fullName?: string;
-  WIP?: string;
+  WID?: string;
   phoneNumber?: string;
+  email?: string;
   state?: string;
   error?: string;
 }
@@ -68,7 +69,7 @@ export interface ISignup {
   phoneNumber?: string;
   email?: string;
   NIN?: string;
-  WIP?: string;
+  WID?: string;
   password: string;
   confirmPassword: string;
 }

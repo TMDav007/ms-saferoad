@@ -13,7 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@sfroads/common": "^1.0.41",
+		"@sfroads/common": "^1.0.43",
 		"amqplib": "^0.10.3",
 		"bcryptjs": "^2.4.3",
 		"chalk": "^4.1.2",

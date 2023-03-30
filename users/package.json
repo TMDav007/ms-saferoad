@@ -21,7 +21,7 @@
 	},
 	"homepage": "https://github.com/sytyccco/saferoad-service#readme",
 	"dependencies": {
-		"@sfroads/common": "^1.0.41",
+		"@sfroads/common": "^1.0.43",
 		"@types/cookie-session": "^2.0.44",
 		"amqplib": "^0.10.3",
 		"bcryptjs": "^2.4.3",
