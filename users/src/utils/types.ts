@@ -88,6 +88,12 @@ export interface IAccountVerify {
   expiresAt?: Date;
 }
 
+export interface ISignin {
+  NIN?: string;
+  WID?: string;
+  password?: string;
+}
+
 export interface UserPayload {
   id: string;
   email: string;

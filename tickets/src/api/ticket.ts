@@ -20,7 +20,7 @@ export default (app: any, channel: any) => {
     return res
       .status(200)
       .json({ message: "Welcome to safe road ticket entry point" });
-  })
+  });
   app.get("/api/v1/ticket", (_req: Request, res: Response) => {
     return res
       .status(200)
@@ -46,10 +46,7 @@ export default (app: any, channel: any) => {
         }: ITicket = req.body;
         const valid: any = validateTicketData(req.body);
         if (valid.error) {
-          throw new AppError(
-            StatusCodes.BAD_REQUEST,
-            "Ticket's details provided are invalid."
-          );
+          throw new AppError(StatusCodes.BAD_REQUEST, valid.error.message);
         }
         const data = await ticket.createTicket(req, {
           offenderIDNumber,
@@ -104,7 +101,7 @@ export default (app: any, channel: any) => {
   );
 
   app.get(
-    "/ticket/:id",
+    "/api/v1/ticket/:id",
     auth,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -125,7 +122,7 @@ export default (app: any, channel: any) => {
   );
 
   app.get(
-    "/api/v1/ticket/allBooked",
+    "/api/v1/ticket/officer/tickets",
     auth,
     requireOfficerAuth,
     async (req: any, res: Response, next: NextFunction) => {
@@ -151,6 +148,8 @@ export default (app: any, channel: any) => {
     auth,
     async (req: any, res: Response, next: NextFunction) => {
       try {
+        if (req.user.userType !== "Offender")
+          throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized");
         const data = await ticket.getAllTicketsByOffender(req.user.NIN);
         if (!data) {
           throw new AppError(StatusCodes.NOT_FOUND, "Ticket not found");
@@ -197,6 +196,8 @@ export default (app: any, channel: any) => {
     auth,
     async (req: any, res: Response, next: NextFunction) => {
       try {
+        if (req.user.userType !== "Offender")
+          throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized");
         const data = await ticket.getATicketByOffender(
           req.user.NIN,
           req.params.id

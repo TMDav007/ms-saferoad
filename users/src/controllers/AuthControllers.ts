@@ -7,6 +7,8 @@ import { getPoliceDetails, policeData } from "../data/policeDummyData";
 import { getOffendersDetails } from "../data/NINDummyData";
 import {
   validateAccountVerify,
+  validateOTP,
+  validateSignin,
   validateSignupData,
 } from "../utils/validations";
 import sendVerificationMail from "../library/verificationEmail";
@@ -17,7 +19,7 @@ import {
   AppError,
   generateOTP,
   encryptPassword,
-  createToken
+  createToken,
 } from "@sfroads/common";
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,10 +29,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
     let { WID, NIN, fullName, email, phoneNumber, password } = req.body;
     const valid: any = validateSignupData(req.body);
     if (valid.error) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "User's details provided are invalid."
-      );
+      throw new AppError(StatusCodes.BAD_REQUEST, valid.error.message);
     }
     email = email?.toLowerCase();
     const existingEmail =
@@ -152,6 +151,10 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 const resendOtp = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let { email } = req.body;
+    const valid = validateOTP(req.body);
+    if (valid.error) {
+      throw new AppError(StatusCodes.BAD_REQUEST, valid.error.message);
+    }
 
     email = email?.toLowerCase();
     const existingEmail =
@@ -193,10 +196,7 @@ const verifyAccount = async (
     let { otp, userId } = req.body;
     const valid = validateAccountVerify(req.body);
     if (valid.error) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "Account verification details provided are invalid."
-      );
+      throw new AppError(StatusCodes.BAD_REQUEST, valid.error.message);
     }
     const isUserVerify: any = await UserVerification.find({ userId });
 
@@ -264,30 +264,37 @@ const verifyAccount = async (
 
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let { NIN, WID, PASSWORD } = req.body;
+    let { NIN, WID, password } = req.body;
     let user;
+
+    const valid: any = validateSignin(req.body);
+
+    if (valid.error) {
+      throw new AppError(StatusCodes.BAD_REQUEST, valid.error.message);
+    }
     if (NIN) {
       user = NIN && (await User.findOne({ NIN }));
     }
-    if (WID && PASSWORD) {
-      user = NIN && (await User.findOne({ WID }));
+    if (WID && password) {
+      user = WID && (await User.findOne({ WID }));
     }
-    console.log(user)
-    //Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user?._id,
-        email: user?.email,
-        verified: user?.verified,
-        userType: user?.userType,
-        idNum: user?.NIN || user?.WID,
-      },
-      process.env.JWT_KEY!
-    );
+    if (!user) throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    if (!NIN) {
+      if (!user.password)
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          "Password is needed to continue!!!"
+        );
+      if (user.password) {
+        const isPasswordMatch = await decryptPass(password, user.password);
+        if (!isPasswordMatch)
+          throw new AppError(StatusCodes.BAD_REQUEST, "password is incorrect");
+      }
+    }
 
     const token = createToken(user);
     return res.status(StatusCodes.OK).json({
-      message: "Signin successfully",
+      message: "Sign in was successful",
       success: true,
       token,
     });
