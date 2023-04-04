@@ -65,8 +65,8 @@ jobs:
       with:
         aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
         aws_secret_key: ${{secrets.AWS_ACCESS_SECRET}}
-        application_name: saferoad-dev
-        environment_name: Saferoaddev-env
+        application_name: roadBunny
+        environment_name: Roadbunny-env
         version_label: "ver-${{ github.sha}}"
         region: us-east-1
         deployment_package: deploy.zip
