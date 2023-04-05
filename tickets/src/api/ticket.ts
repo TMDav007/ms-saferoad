@@ -172,10 +172,7 @@ export default (app: any, channel: any) => {
     requireOfficerAuth,
     async (req: any, res: Response, next: NextFunction) => {
       try {
-        const data = await ticket.getATicketByOfficer(
-          req.user.userId,
-          req.params.id
-        );
+        const data = await ticket.findATicket(req.params.id);
         if (!data) {
           throw new AppError(StatusCodes.NOT_FOUND, "Ticket not found");
         }
@@ -196,12 +193,11 @@ export default (app: any, channel: any) => {
     auth,
     async (req: any, res: Response, next: NextFunction) => {
       try {
+        if (!req.params)
+          throw new AppError(StatusCodes.BAD_REQUEST, "Ticket Id is required");
         if (req.user.userType !== "Offender")
           throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized");
-        const data = await ticket.getATicketByOffender(
-          req.user.NIN,
-          req.params.id
-        );
+        const data = await ticket.findATicket(req.params.id);
         if (!data) {
           throw new AppError(StatusCodes.NOT_FOUND, "Ticket not found");
         }
