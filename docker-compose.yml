@@ -40,5 +40,5 @@ services:
       - users
       - tickets
     ports:
-      - "8000:80"
+      - "80:80"
       
