@@ -1,7 +1,4 @@
 import User from "../models/User";
-import { StatusCodes } from "http-status-codes";
-import { NextFunction, Request, Response } from "express";
-import { IUser } from "../utils/types";
 import { AppError } from "@sfroads/common";
 
 export const handleTicketCreated = async (data: any) => {
@@ -23,7 +20,6 @@ export const handleTicketCreated = async (data: any) => {
     updatedAt,
   } = data;
 
-  console.log("Im here");
   const newTicket = {
     _id,
     offenderIDNumber,

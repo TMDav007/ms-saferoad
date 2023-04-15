@@ -5,7 +5,6 @@ import { SubscribeMessage } from "../consumer";
 import { SubscribeEvents } from "../services/user-services";
 import { UserRoute } from "../routes/userRoute";
 
-const v1 = Router();
 export default (app: any, channel: any) => {
   SubscribeMessage(channel, SubscribeEvents);
   app.get("/", async (_req: Request, res: Response) => {

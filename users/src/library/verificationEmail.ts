@@ -8,17 +8,17 @@ import mongoose from "mongoose";
 interface verifyMail {
   _id: string;
   email: string;
+  otp: string;
 }
 
 const sendVerificationMail = async (
-  { _id, email }: verifyMail,
+  { _id, email, otp }: verifyMail,
   _res: Response,
   next: NextFunction
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const otp = generateOTP(6);
     const currentUrl = "http://locallhost:9090";
     const html = `
         <p> Verify your email address to complete your registration.</p> <br />
@@ -28,15 +28,15 @@ const sendVerificationMail = async (
         <p>if you don't recognize ${email}, you can safely ignore this mail </>
     `;
 
-    const hashedOTP = await encryptPassword(otp.toString());
-    const newUserVerification = new UserVerification({
-      userId: _id,
-      otp: hashedOTP,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 60 * 15,
-    });
+    // const hashedOTP = await encryptPassword(otp.toString());
+    // const newUserVerification = new UserVerification({
+    //   userId: _id,
+    //   otp: hashedOTP,
+    //   createdAt: Date.now(),
+    //   expiresAt: Date.now() + 60 * 15,
+    // });
 
-    await newUserVerification.save();
+    // await newUserVerification.save();
     await mailTransporter({
       to: email,
       subject: "Account verification code",

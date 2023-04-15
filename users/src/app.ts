@@ -7,7 +7,6 @@ import { CheckRequestType } from "@sfroads/common";
 import { not_found } from "@sfroads/common";
 import { AppError, errorHandler } from "@sfroads/common";
 //import v1 from "./utils/v1";
-import createMQConsumer from "./consumer";
 // import user from "./routes/userRoute";
 import v1 from './utils/v1'
 
@@ -16,7 +15,6 @@ const createServer = (app?: any, channel?: any) => {
     throw new AppError(500, "JWT_KEY must be defined");
   }
 
-  console.log(process.env.NODE_ENV)
   if (process.env.NODE_ENV !== "test" && !process.env.MONGO_URI) {
     throw new AppError(500, "MONGO_URI must be defined");
   }

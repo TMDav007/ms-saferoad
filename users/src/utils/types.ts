@@ -101,6 +101,20 @@ export interface UserPayload {
   userType: string;
 }
 
+export interface JWTPayload {
+  id?: string;
+  userId: string;
+  fullName: string;
+  phoneNumber?: string;
+  email?: string;
+  verified: boolean;
+  status: string;
+  WID?: string;
+  NIN?: string;
+  isSignup: boolean;
+  userType: string;
+}
+
 export interface JTPayload {
   userId: string;
   fullName: string;

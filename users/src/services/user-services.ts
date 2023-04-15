@@ -7,7 +7,6 @@ export const SubscribeEvents = (payload: any) => {
 
   payload = JSON.parse(payload);
   const { action, data } = payload;
-  console.log(payload, data, action, "payLoad");
 
   switch (action) {
     case "Ticket:Created":

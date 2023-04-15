@@ -28,9 +28,39 @@ services:
       - .:/app
       - /app/tickets/node_modules
 
-    
     env_file:
       - ./tickets/.env
+
+  notifications:
+    build:
+      dockerfile: Dockerfile
+      context: ./notifications
+    container_name: notifications
+    ports:
+      - "8003:8003"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/notifications/node_modules
+
+    
+    env_file:
+      - ./notifications/.env
+  otp:
+    build:
+      dockerfile: Dockerfile
+      context: ./otp
+    container_name: otp
+    ports:
+      - "8005:8005"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/otp/node_modules
+
+    
+    env_file:
+      - ./otp/.env
 
   nginx-proxy:
     build:
@@ -39,6 +69,8 @@ services:
     depends_on:
       - users
       - tickets
+      - notifications
+      - otp
     ports:
       - "80:80"
       

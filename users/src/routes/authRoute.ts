@@ -1,17 +1,12 @@
 import express from "express";
-import {
-  resendOtp,
-  signIn,
-  signout,
-  signup,
-  verifyAccount,
-} from "./../controllers/AuthControllers";
+import AuthController from "./../controllers/AuthControllers";
 
+const authController = new AuthController();
+const { signup, signIn, verifyAccount, resendOtp } = authController;
 const AuthRoute = express.Router();
 
 AuthRoute.post("/signup", signup)
   .post("/verify", verifyAccount)
-  .post("/signout", signout)
   .post("/otp", resendOtp)
   .post("/signin", signIn);
 

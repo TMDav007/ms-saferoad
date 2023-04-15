@@ -6,9 +6,8 @@ import createServer from "./app";
 import dotenv from "dotenv";
 import { natsWrapper } from "./nats-wrapper";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
-import createMQProducer from "./producer";
-import createMQConsumer, { CreateChannel } from "./consumer";
-import { mqWrapper } from "./listen";
+import { CreateChannel } from "./consumer";
+
 dotenv.config();
 
 // natsWrapper.connect(
@@ -47,7 +46,7 @@ export const start = async () => {
   // const consume = "Ticket:Created"
   //consumer(consume, consumer)
   const app = express();
-  createServer(app,channel);
+  createServer(app, channel);
 
   http
     .createServer(app)

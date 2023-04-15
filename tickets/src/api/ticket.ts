@@ -72,6 +72,18 @@ export default (app: any, channel: any) => {
           JSON.stringify(msg)
         );
 
+        PublishMessage(
+          channel,
+          process.env.NOTIFICATION_BINDING_KEY,
+          JSON.stringify({
+            action: "Ticket:Created",
+            data: {
+              message: `A ticket for ${offense} has been booked for you`,
+              userId: offenderIDNumber,
+            },
+          })
+        );
+
         return res.status(StatusCodes.CREATED).json({
           message: "Ticket created successfully",
           success: true,
@@ -150,6 +162,7 @@ export default (app: any, channel: any) => {
       try {
         if (req.user.userType !== "Offender")
           throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized");
+        // console.log(req.user, "uehsnd")
         const data = await ticket.getAllTicketsByOffender(req.user.NIN);
         if (!data) {
           throw new AppError(StatusCodes.NOT_FOUND, "Ticket not found");
