@@ -2,10 +2,13 @@ import { Router, Request, Response, NextFunction } from "express";
 import { Logging } from "@sfroads/common";
 import TicketRoute from "../routes/ticketRoute";
 import ticket from "../api/ticket";
+import { SubscribeMessage } from "../producer";
+import { SubscribeEvents } from "../events/services";
 
 const v1 = Router();
 
 export default (app: any, channel: any) => {
+  SubscribeMessage(channel, SubscribeEvents);
   app.get("/whoami", (_req: Request, res: Response) => {
     res
       .status(200)

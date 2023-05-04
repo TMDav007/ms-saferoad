@@ -68,13 +68,13 @@ export default (app: any, channel: any) => {
 
         PublishMessage(
           channel,
-          process.env.USER_BINDING_KEY,
+          process.env.USER_BINDING_KEY!,
           JSON.stringify(msg)
         );
 
         PublishMessage(
           channel,
-          process.env.NOTIFICATION_BINDING_KEY,
+          process.env.NOTIFICATION_BINDING_KEY!,
           JSON.stringify({
             action: "Ticket:Created",
             data: {

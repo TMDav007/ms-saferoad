@@ -4,7 +4,7 @@ import { Logging } from "@sfroads/common";
 import connectDB, { SERVER_PORT } from "./DB/connectDB";
 import createServer from "./app";
 import dotenv from "dotenv";
-import createMQProducer, { CreateChannel } from "./producer";
+import { CreateChannel } from "./producer";
 import { natsWrapper } from "./nats-wrapper";
 dotenv.config();
 

@@ -6,7 +6,7 @@ import { SubscribeEvents } from "../services/user-services";
 import { UserRoute } from "../routes/userRoute";
 
 export default (app: any, channel: any) => {
-  SubscribeMessage(channel, SubscribeEvents);
+  //SubscribeMessage(channel, SubscribeEvents);
   app.get("/", async (_req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome to safe road API entry point" });
   });

@@ -1,4 +1,4 @@
-import { handleTicketCreated } from "./event-subscribed";
+import { handleCreateNotification } from "./event-subscribed";
 import { Subjects } from "./subject";
 
 export const SubscribeEvents = (payload: any) => {
@@ -8,7 +8,10 @@ export const SubscribeEvents = (payload: any) => {
   const { action, data } = payload;
   switch (action) {
     case Subjects.TicketCreated:
-      handleTicketCreated(data);
+        handleCreateNotification(data);
+    case Subjects.PaymentSuccess:
+        handleCreateNotification(data);
+    
       break;
     default:
       break;

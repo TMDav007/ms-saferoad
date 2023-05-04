@@ -1,0 +1,120 @@
+version: "3"
+services:
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - users
+      - tickets
+      - notifications
+      - otp
+      - payment
+    ports: 
+      - "80:80"
+
+  users:
+    build:
+      dockerfile: Dockerfile
+      context: ./users
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - AUTH_EMAIL=${AUTH_EMAIL}
+      - AUTH_PASS=${AUTH_PASS}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_KEY=${JWT_KEY}
+      - JWTSECRET=${JWTSECRET}
+      - AMQP_URI=${AMQP_URI}
+      - EXCHANGE_URI=${EXCHANGE_URI}
+      - USER_BINDING_KEY=${USER_BINDING_KEY}
+     
+
+    container_name: roadbuddy_users
+    ports:
+      - "8001:8001"
+
+  tickets:
+    build:
+      dockerfile: Dockerfile
+      context: ./tickets
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_KEY=${JWT_KEY}
+      - JWTSECRET=${JWTSECRET}
+      - AMQP_URI=${AMQP_URI}
+      - EXCHANGE_URI=${EXCHANGE_URI}
+      - TICKET_BINDING_KEY=${TICKET_BINDING_KEY}
+    container_name: roadbuddy_tickets
+    ports:
+      - "8002:8002"
+
+  notifications:
+    build:
+      dockerfile: Dockerfile
+      context: ./notifications
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_KEY=${JWT_KEY}
+      - JWTSECRET=${JWTSECRET}
+      - AMQP_URI=${AMQP_URI}
+      - EXCHANGE_URI=${EXCHANGE_URI}
+      - NOTIFICATION_BINDING_KEY=${NOTIFICATION_BINDING_KEY}
+    container_name: roadbuddy_notifications
+    
+    ports:
+      - "8003:8003"
+
+  otp:
+    build:
+      dockerfile: Dockerfile
+      context: ./otp
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_KEY=${JWT_KEY}
+      - JWTSECRET=${JWTSECRET}
+      - AMQP_URI=${AMQP_URI}
+      - EXCHANGE_URI=${EXCHANGE_URI}
+      - OTP_BINDING_KEY=${OTP_BINDING_KEY}
+    container_name: roadbuddy_otp
+
+    ports:
+      - "8005:8005"
+
+  payment:
+    build:
+      dockerfile: Dockerfile
+      context: ./payment
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_KEY=${JWT_KEY}
+      - JWTSECRET=${JWTSECRET}
+      - AMQP_URI=${AMQP_URI}
+      - EXCHANGE_URI=${EXCHANGE_URI}
+      - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
+    container_name: roadbuddy_payment
+    ports:
+      - "8006:8006"

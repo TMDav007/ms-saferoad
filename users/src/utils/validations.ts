@@ -28,12 +28,14 @@ const validateSignupData = (signup: ISignup) => {
     }),
     // confirmPassword: Joi.string().min(6).max(36).valid(Joi.ref("password")),
   })
-    .xor("WID", "NIN", "email", "phoneNumber")
-    .and( "WID", "password")
+    .xor("WID", "fullName")
+    .or("WID", "email", "phoneNumber")
+    .and("WID", "password")
     .messages({
       "object.missing": "You must add the required input fields to continue",
-      "object.xor": "At least an NIN or WID is required",
-      "object.and": "email, WID and password are required",
+      "object.xor": "WID or fullName is required but not both ",
+      "object.or": "At least an NIN or WID is required",
+      "object.and": "Email, WID and password are required",
       "object.unknown": "Value inputted is unknown",
     });
 
