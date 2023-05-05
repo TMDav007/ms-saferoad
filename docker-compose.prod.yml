@@ -28,8 +28,8 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_KEY=${JWT_KEY}
       - JWTSECRET=${JWTSECRET}
-      - AMQP_URI=${AMQP_URI}
-      - EXCHANGE_URI=${EXCHANGE_URI}
+      - AMQP_URL=${AMQP_URI}
+      - EXCHANGE_NAME=${EXCHANGE_URI}
       - USER_BINDING_KEY=${USER_BINDING_KEY}
      
 
@@ -50,8 +50,8 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_KEY=${JWT_KEY}
       - JWTSECRET=${JWTSECRET}
-      - AMQP_URI=${AMQP_URI}
-      - EXCHANGE_URI=${EXCHANGE_URI}
+      - AMQP_URL=${AMQP_URI}
+      - EXCHANGE_NAME=${EXCHANGE_URI}
       - TICKET_BINDING_KEY=${TICKET_BINDING_KEY}
     container_name: roadbuddy_tickets
     ports:
@@ -70,8 +70,8 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_KEY=${JWT_KEY}
       - JWTSECRET=${JWTSECRET}
-      - AMQP_URI=${AMQP_URI}
-      - EXCHANGE_URI=${EXCHANGE_URI}
+      - AMQP_URL=${AMQP_URI}
+      - EXCHANGE_NAME=${EXCHANGE_URI}
       - NOTIFICATION_BINDING_KEY=${NOTIFICATION_BINDING_KEY}
     container_name: roadbuddy_notifications
     
@@ -91,8 +91,8 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_KEY=${JWT_KEY}
       - JWTSECRET=${JWTSECRET}
-      - AMQP_URI=${AMQP_URI}
-      - EXCHANGE_URI=${EXCHANGE_URI}
+      - AMQP_URL=${AMQP_URI}
+      - EXCHANGE_NAME=${EXCHANGE_URI}
       - OTP_BINDING_KEY=${OTP_BINDING_KEY}
     container_name: roadbuddy_otp
 
@@ -112,8 +112,8 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_KEY=${JWT_KEY}
       - JWTSECRET=${JWTSECRET}
-      - AMQP_URI=${AMQP_URI}
-      - EXCHANGE_URI=${EXCHANGE_URI}
+      - AMQP_URL=${AMQP_URI}
+      - EXCHANGE_NAME=${EXCHANGE_URI}
       - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
     container_name: roadbuddy_payment
     ports:
