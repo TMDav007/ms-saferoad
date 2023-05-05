@@ -26,6 +26,9 @@ const UserSchema = new Schema<IUser>({
   plateNumber: {
     type: String,
   },
+  driverLicense: {
+    type: String,
+  },
   WID: {
     type: String,
   },

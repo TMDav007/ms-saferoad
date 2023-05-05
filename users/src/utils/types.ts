@@ -31,6 +31,7 @@ export interface IUser {
   password?: string;
   NIN?: string;
   plateNumber?: string;
+  driverLicense?: string;
   WID?: string;
   phoneNumber?: string;
   address?: string;

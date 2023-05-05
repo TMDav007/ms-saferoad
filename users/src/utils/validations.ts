@@ -73,6 +73,25 @@ const validateOTP = (otprequest: { email: string }) => {
   return otpSchema.validate(otprequest);
 };
 
+const validateAddInfo = (request: { email: string }) => {
+  const addInfoSchema = Joi.object({
+    carModel: Joi.string().messages({
+      "string.base": "car Model must be a string",
+    }),
+    driverLicense: Joi.string().messages({
+      "string.base": "Driver license must be a string",
+    }),
+    plateNumber: Joi.string().messages({
+      "string.base": "Plate Number must be a string",
+    }),
+  })
+    .or("carModel", "driverLicense", "plateNumber")
+    .messages({
+      "object.unknown": "Invalid input",
+    });
+
+  return addInfoSchema.validate(request);
+};
 const validateSignin = (signin: ISignin) => {
   const signinSchema = Joi.object({
     NIN: Joi.string()
@@ -100,4 +119,5 @@ export {
   validateOTP,
   validateSignin,
   validateAccountVerify,
+  validateAddInfo
 };
