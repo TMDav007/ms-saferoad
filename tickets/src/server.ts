@@ -29,20 +29,25 @@ const QUEUE_NAME = "saferoad";
 // export const producer = createMQProducer(AMQP_URL, QUEUE_NAME)
 
 const start = async () => {
-  const channel = await CreateChannel();
-  connectDB();
+  try {
+    const channel = await CreateChannel();
+    connectDB();
 
-  // mqWrapper.connect(AMQP_URL, QUEUE_NAME);
-  // consumer()
-  // const consume = "Ticket:Created"
-  //consumer(consume, consumer)
-  const app = express();
-  createServer(app, channel);
+    // mqWrapper.connect(AMQP_URL, QUEUE_NAME);
+    // consumer()
+    // const consume = "Ticket:Created"
+    //consumer(consume, consumer)
+    const app = express();
+    createServer(app, channel);
 
-  http
-    .createServer(app)
-    .listen(SERVER_PORT, () =>
-      Logging.info(`Ticket server is running on port ${SERVER_PORT}`)
-    );
+    http
+      .createServer(app)
+      .listen(SERVER_PORT, () =>
+        Logging.info(`Ticket server is running on port ${SERVER_PORT}`)
+      );
+  } catch (err) {
+    console.log(err, "server error");
+  }
 };
+
 start();
